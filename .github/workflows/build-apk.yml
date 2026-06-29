@@ -30,15 +30,29 @@ jobs:
 
       - name: Generate launcher icons
         run: |
-          for entry in "mipmap-mdpi:48" "mipmap-hdpi:72" "mipmap-xhdpi:96" "mipmap-xxhdpi:144" "mipmap-xxxhdpi:192"; do
-            dir="${entry%%:*}"
-            size="${entry##*:}"
-            mkdir -p "android/app/src/main/res/$dir"
-            convert -size ${size}x${size} xc:"#1976D2" -fill white \
-              -font DejaVu-Sans-Bold -pointsize $((size/3)) \
-              -gravity center -annotate 0 "T" \
-              "android/app/src/main/res/$dir/ic_launcher.png"
-          done
+          python3 - <<'EOF'
+          import struct, zlib, os
+
+          def make_png(size, r, g, b):
+              def chunk(tag, data):
+                  crc = zlib.crc32(tag + data) & 0xffffffff
+                  return struct.pack('>I', len(data)) + tag + data + struct.pack('>I', crc)
+              sig = b'\x89PNG\r\n\x1a\n'
+              ihdr = chunk(b'IHDR', struct.pack('>IIBBBBB', size, size, 8, 2, 0, 0, 0))
+              row = b'\x00' + bytes([r, g, b] * size)
+              idat = chunk(b'IDAT', zlib.compress(row * size))
+              iend = chunk(b'IEND', b'')
+              return sig + ihdr + idat + iend
+
+          sizes = {'mipmap-mdpi': 48, 'mipmap-hdpi': 72, 'mipmap-xhdpi': 96,
+                   'mipmap-xxhdpi': 144, 'mipmap-xxxhdpi': 192}
+          for dirname, size in sizes.items():
+              path = f'android/app/src/main/res/{dirname}'
+              os.makedirs(path, exist_ok=True)
+              with open(f'{path}/ic_launcher.png', 'wb') as f:
+                  f.write(make_png(size, 25, 118, 210))
+          print('Icons generated successfully!')
+          EOF
 
       - name: Build APK
         run: flutter build apk --release
