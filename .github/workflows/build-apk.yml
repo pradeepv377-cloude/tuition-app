@@ -28,6 +28,18 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Generate launcher icons
+        run: |
+          for entry in "mipmap-mdpi:48" "mipmap-hdpi:72" "mipmap-xhdpi:96" "mipmap-xxhdpi:144" "mipmap-xxxhdpi:192"; do
+            dir="${entry%%:*}"
+            size="${entry##*:}"
+            mkdir -p "android/app/src/main/res/$dir"
+            convert -size ${size}x${size} xc:"#1976D2" -fill white \
+              -font DejaVu-Sans-Bold -pointsize $((size/3)) \
+              -gravity center -annotate 0 "T" \
+              "android/app/src/main/res/$dir/ic_launcher.png"
+          done
+
       - name: Build APK
         run: flutter build apk --release
 
