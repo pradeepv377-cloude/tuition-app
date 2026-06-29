@@ -1,0 +1,98 @@
+========================================
+  TUITIONPRO - BUILD INSTRUCTIONS
+========================================
+
+STEP 1: Install Flutter
+-----------------------
+1. Go to https://flutter.dev/docs/get-started/install
+2. Download Flutter for your OS (Windows/Mac/Linux)
+3. Extract and add flutter/bin to your PATH
+4. Run: flutter doctor
+   (Fix any issues shown, especially Android SDK)
+
+STEP 2: Install Android Studio
+-------------------------------
+1. Download from https://developer.android.com/studio
+2. Install Android SDK via SDK Manager
+3. Accept all SDK licenses:
+   flutter doctor --android-licenses
+
+STEP 3: Build the APK
+----------------------
+1. Open Terminal / Command Prompt
+2. Navigate to this folder:
+   cd /path/to/tuition_app
+
+3. Get dependencies:
+   flutter pub get
+
+4. Build the release APK:
+   flutter build apk --release
+
+5. Your APK will be at:
+   build/app/outputs/flutter-apk/app-release.apk
+
+STEP 4: Install on Android Phone
+----------------------------------
+1. Enable "Unknown Sources" / "Install unknown apps"
+   on your Android phone
+   (Settings > Security > Unknown Sources)
+
+2. Copy the APK to your phone via USB or WhatsApp
+
+3. Tap the APK file on your phone to install
+
+========================================
+  APP FEATURES
+========================================
+
+1. DASHBOARD
+   - Overview of total students, demo students, pending fees
+
+2. NEW ADMISSION
+   - Register student name, parent name, WhatsApp number
+   - Set subject, monthly fee, and admission date
+   - Automatic 3-day demo period tracking
+
+3. STUDENTS LIST
+   - View all students
+   - Search by name, parent, or subject
+   - Edit or remove students
+   - Demo badge shows remaining demo days
+
+4. FEE COLLECTION
+   - View all students for the current month
+   - Navigate to past/future months
+   - Mark fees as Paid / Unpaid
+   - Send WhatsApp reminder to individual student
+   - "Send All Reminders" button — opens WhatsApp one
+     by one for all pending students with professional
+     pre-filled message
+
+5. SETTINGS
+   - Enable monthly reminder notification
+   - Pick the day of month (1-28)
+   - App will notify you at 9:00 AM on that day
+   - Tap notification > Send All Reminders
+
+========================================
+  WHATSAPP MESSAGE TEMPLATE
+========================================
+
+Dear [Parent Name],
+
+Hope your child [Student Name] is doing well! 🙏
+
+This is a gentle reminder that the *tuition fee of
+₹[Amount]* for *[Month Year]* is now due.
+
+Kindly arrange the payment at your earliest convenience.
+
+For any queries, please feel free to contact us.
+
+Thank you for your continued trust and support! 😊
+
+Warm Regards,
+Tuition Teacher
+
+========================================
